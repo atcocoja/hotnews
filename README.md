@@ -1,6 +1,21 @@
 # AI 热点新闻视频生产系统
 
-这是一个面向抖音、小红书的 AI 视频快反生产系统，核心链路是：
+## 核心目的（最重要原则）
+
+本项目旨在最大化利用 **ChatGPT image-2** 模型和 **Seedance 2.0** 模型的能力，通过每天从微博、抖音、小红书等国内平台挑选一个最匹配这两个模型能力的热点话题，制作一条 2-3 分钟的 AI 视频。
+
+**选题的第一优先级是"模型能力匹配度"**——热点话题必须能充分发挥 image-2 的图像生成能力和 Seedance 2.0 的视频生成能力，而非单纯追逐热度。
+
+**视频比例：16:9 横屏**（适配多平台：B站、YouTube、横屏模式下的抖音/小红书）
+
+## 文档导航
+
+- **[WORKFLOW.md](WORKFLOW.md)** - 完整工作流指南，从选题到上线的全流程
+- **[HARNESS.md](HARNESS.md)** - Harness 说明，项目的工具、脚本和检查机制
+- **[CHANGELOG.md](CHANGELOG.md)** - 更新日志，记录项目的改进和优化
+- **[project-config.md](project-config.md)** - 项目配置和核心原则
+
+## 核心链路
 
 `热点输入 -> 事实核实 -> 脚本 -> Image 2 分镜图 -> Seedance 2.0 视频片段 -> 发布文案`
 
@@ -102,11 +117,21 @@
 
 ## 快速开始
 
-创建新选题：
-
 ```bash
-scripts/tools/new-topic.sh N02 some-hot-news
+# 1. 评估热点话题（交互式）
+bash scripts/tools/topic-evaluator.sh
+
+# 2. 创建新选题目录
+bash scripts/tools/new-topic.sh N06 topic-slug
+
+# 3. 按工作流填写生产文件
+# 详见 WORKFLOW.md
+
+# 4. 检查完整性
+bash scripts/tools/check-production.sh outputs/N06-topic-slug
 ```
+
+完整工作流请查看 [WORKFLOW.md](WORKFLOW.md)。
 
 查看队列：
 
@@ -143,8 +168,9 @@ outputs/NXX-slug/
 
 ## 使用原则
 
+- **每天只选一个话题，优先匹配 image-2 和 Seedance 2.0 的生成能力，不单纯追热度**
 - 新闻必须先核实，再写脚本
-- 所有“今天/昨天/刚刚”改成绝对日期
+- 所有”今天/昨天/刚刚”改成绝对日期
 - 一张宫格图只服务一段 `12-15 秒` 视频
 - Seedance 提示词按时间轴拆开，不把多个动作团成一段长话
-- 有外部参考素材时，必须写清“它用来参考什么”
+- 有外部参考素材时，必须写清”它用来参考什么”
